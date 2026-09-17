@@ -3,7 +3,12 @@ import ExploreBtn from '@/components/ExploreBtn'
 import { events } from '@/lib/contants'
 import React from 'react'
 
-const page = () => {
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+
+const page = async () => {
+  const response = await fetch(`${BASE_URL}/api/events`)
+  const {event} = await response.json()
+
   return (
     <section>
       <h1 className='text-center'>The Hub for Every Dev <br/> Event You Can't Miss</h1>
@@ -11,12 +16,12 @@ const page = () => {
 
       <ExploreBtn/>
 
-      <div className='mt-20 space-y-2'>
+      <div className='mt-20 space-y-3'>
         <h3>Featured Events</h3>
 
         <ul className='events'>
-          {events.map((events) =>(
-            <EventCards {...events} />
+          {event && event.length > 0 && event.map((events) =>(
+            <EventCards key={events.slug} {...events} />
           ))}
         </ul>
       </div>

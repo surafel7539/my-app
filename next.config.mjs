@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  
+  images:[
+    {
+      protocols: 'https',
+      hostname: 'res.cloudinary.com'
+    }
+  ],
   cacheComponents: true,
   reactCompiler: true,
 };
