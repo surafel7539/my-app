@@ -1,7 +1,30 @@
 import EventCards from '@/components/EventCards'
 import ExploreBtn from '@/components/ExploreBtn'
-import { events } from '@/lib/contants'
-import React from 'react'
+import React, { Suspense } from 'react'
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000'
+
+async function fetchEvents() {
+  try {
+    const response = await fetch(`${BASE_URL}/api/events`)
+    const data = await response.json()
+    return Array.isArray(data) ? data : []
+  } catch {
+    return []
+  }
+}
+
+async function FeaturedEvents() {
+  const events = await fetchEvents()
+
+  return (
+    <ul className='events'>
+      {events.map((event) => (
+        <EventCards key={event.slug} {...event} />
+      ))}
+    </ul>
+  )
+}
 
 const page = () => {
   return (
@@ -14,11 +37,9 @@ const page = () => {
       <div className='mt-20 space-y-2'>
         <h3>Featured Events</h3>
 
-        <ul className='events'>
-          {events.map((events) =>(
-            <EventCards {...events} />
-          ))}
-        </ul>
+        <Suspense fallback={<p>Loading events…</p>}>
+          <FeaturedEvents/>
+        </Suspense>
       </div>
     </section>
   )
