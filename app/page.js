@@ -7,10 +7,7 @@ export const instant = false;
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 const page = async () => {
-  <Suspense>
-    const response = await fetch(`${BASE_URL}/api/events`)
-    
-  </Suspense>
+  const response = await fetch(`${BASE_URL}/api/events`)
   const {event} = await response.json()
 
   return (
@@ -25,7 +22,9 @@ const page = async () => {
 
         <ul className='events'>
           {event && event.length > 0 && event.map((events) =>(
-            <EventCards key={events.slug} {...events} />
+            <Suspense key={events.slug} fallback={'Loading events...'}>
+              <EventCards  {...events} />
+            </Suspense>
           ))}
         </ul>
       </div>
