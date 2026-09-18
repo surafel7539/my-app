@@ -38,9 +38,11 @@ const EventDetails = async ({params}) => {
     cacheLife('seconds')
     const {slug} = await params
     const request = await fetch(`${BASE_URL}/api/events/${slug}`)
-    const {event : {_id, description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview }} = await request.json()
+    const { event } = await request.json()
 
-    if (!description) return notFound()
+    if (!event) return notFound()
+
+    const { _id, description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview } = event
     
     let bookings = 10;
     const similarEvents = await getSimilarEventsBySlug(slug)
