@@ -21,8 +21,8 @@ const page = async () => {
         <h3>Featured Events</h3>
 
         <ul className='events'>
-          {event && event.length > 0 && event.map(({time, title, date, image, location}) =>(
-            <EventCards key={title} title={title} image={image} slug={slug} time={time} date={date} location={location}  />
+          {event && event.length > 0 && event.map(({time, title, date, image, location, slug}) =>(
+            <EventCards key={slug} title={title} image={image} slug={slug} time={time} date={date} location={location}  />
           ))}
         </ul>
       </div>
