@@ -2,7 +2,7 @@ import BookingForm from '@/components/BookingForm'
 import EventCards from '@/components/EventCards'
 import { getSimilarEventsBySlug } from '@/lib/actions'
 import { notFound } from 'next/navigation'
-import React, { Suspense } from 'react'
+import React from 'react'
 
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
@@ -42,8 +42,7 @@ const EventDetails = async ({params}) => {
     let bookings = 10;
     const similarEvents = await getSimilarEventsBySlug(slug)
   return (
-    <Suspense>
-        <section id='event'>
+    <section id='event'>
       <div className='header'>
         <h1>Event Description</h1>
         <p className='mt-2'>{description}</p>
@@ -93,13 +92,12 @@ const EventDetails = async ({params}) => {
       <div className='flex w-full flex-col gap-4 pt-20'>
             <h2>Similar Events</h2>
             <div className='events'>
-                {similarEvents.map((similarevents) => (
-                    <EventCards key={similarevents.id} {...similarevents}/>
+                {similarEvents.map(({time, title, date, image, location}) => (
+                    <EventCards key={title} title={title} image={image} slug={slug} time={time} date={date} location={location}/>
                 ))}
             </div>
       </div>
     </section>
-    </Suspense>
   )
 }
 
