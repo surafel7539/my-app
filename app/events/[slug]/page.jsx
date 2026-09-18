@@ -34,7 +34,9 @@ const EventTags = ({eventTags}) => (
 
 const EventDetails = async ({params}) => {
     const {slug} = await params
-    const request = await fetch(`${BASE_URL}/api/events/${slug}`)
+    const request = await fetch(`${BASE_URL}/api/events/${slug}`,{
+        cache: 'force-cache'
+    })
     const {event : {description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview }} = await request.json()
 
     if (!description) return notFound()
