@@ -4,7 +4,7 @@ import { getSimilarEventsBySlug } from '@/lib/actions'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
-
+export const instant = false
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 
