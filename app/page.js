@@ -1,13 +1,16 @@
 import EventCards from '@/components/EventCards'
 import ExploreBtn from '@/components/ExploreBtn'
 import { events } from '@/lib/contants'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 export const instant = false;
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 const page = async () => {
-  const response = await fetch(`${BASE_URL}/api/events`)
+  <Suspense>
+    const response = await fetch(`${BASE_URL}/api/events`)
+    
+  </Suspense>
   const {event} = await response.json()
 
   return (
