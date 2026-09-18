@@ -1,11 +1,19 @@
 import BookingForm from '@/components/BookingForm'
 import EventCards from '@/components/EventCards'
 import { getSimilarEventsBySlug } from '@/lib/actions'
+import { cacheLife } from 'next/cache'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
-export const instant = false
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+
+async function getEvent(slug) {
+    'use cache'
+    cacheLife('hours')
+
+    const request = await fetch(`${BASE_URL}/api/events/${slug}`)
+    return request.json()
+}
 
 
 const EventDetailItem = ({icon, alt, label}) => (
@@ -35,10 +43,7 @@ const EventTags = ({eventTags}) => (
 const EventDetails = async ({params}) => {
     const {slug} = await params
     
-    const request = await fetch(`${BASE_URL}/api/events/${slug}`,{
-        cache: 'force-cache'
-    })
-    const {event : {description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview }} = await request.json()
+    const {event : {description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview }} = await getEvent(slug)
 
     if (!description) return notFound()
     
