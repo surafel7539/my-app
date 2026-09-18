@@ -94,7 +94,7 @@ const EventDetails = async ({params}) => {
       <div className='flex w-full flex-col gap-4 pt-20'>
             <h2>Similar Events</h2>
             <div className='events'>
-                {similarEvents.map(({time, title, date, image, location}) => (
+                {similarEvents.map(({time, title, date, image, location, slug}) => (
                     <EventCards key={title} title={title} image={image} slug={slug} time={time} date={date} location={location}/>
                 ))}
             </div>
