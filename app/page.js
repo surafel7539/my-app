@@ -7,7 +7,9 @@ import React from 'react'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 const page = async () => {
-  const response = await fetch(`${BASE_URL}/api/events`)
+  const response = await fetch(`${BASE_URL}/api/events`, {
+  cache: "force-cache",
+})
   const {event} = await response.json()
 
   return (
@@ -22,7 +24,7 @@ const page = async () => {
 
         <ul className='events'>
           {event && event.length > 0 && event.map(({time, title, date, image, location, slug}) =>(
-            <EventCards key={slug} title={title} image={image} slug={slug} time={time} date={date} location={location}  />
+            <EventCards key={slug}  title={title} image={image} slug={slug} time={time} date={date} location={location}  />
           ))}
         </ul>
       </div>
