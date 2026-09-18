@@ -38,7 +38,7 @@ const EventDetails = async ({params}) => {
     const request = await fetch(`${BASE_URL}/api/events/${slug}`,{
         cache: 'force-cache'
     })
-    const {event : {description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview }} = await request.json()
+    const {event : {_id, description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview }} = await request.json()
 
     if (!description) return notFound()
     
@@ -87,7 +87,7 @@ const EventDetails = async ({params}) => {
                 ): (
                     <p className='text-sm'>Be the first to a spot</p>
                 )}
-                <BookingForm/>
+                <BookingForm eventId={_id}/>
             </div>
         </aside>
 
