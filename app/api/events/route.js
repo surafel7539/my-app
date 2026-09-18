@@ -43,9 +43,26 @@ export async function POST(NextRequest){
 
         event.image = result.secure_url;
 
-        const createdEvent = await Event.create({...event, tags: tags, agenda: agenda});
+        // ... upper route logic, parsing, and Cloudinary upload ...
 
-        return NextResponse.json({message:'Event creates successfully', event: createdEvent}, { status: 201 })
+event.image = result.secure_url;
+
+// 🛠️ Generate a 100% unique slug before saving to the database
+const baseSlug = event.title
+    ? event.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-\$)+/g, '')
+    : 'event';
+const uniqueSlug = `${baseSlug}-${Date.now()}`; // Appends timestamp (e.g., "cloud-next-2028-1718912345")
+
+// Inject the slug into the document creation payload
+const createdEvent = await Event.create({
+    ...event, 
+    slug: uniqueSlug, // 🚀 This fixes the duplicate key error!
+    tags: tags, 
+    agenda: agenda
+});
+
+return NextResponse.json({ message: 'Event created successfully', event: createdEvent }, { status: 201 });
+
     } catch (e) {
         console.error(e);
         return NextResponse.json({message:'Event Creation Failed',error: e instanceof Error ? e.message : 'Unknown'}, {status: 500})

@@ -32,7 +32,7 @@ const BookingSchema = new Schema(
   }
 );
 
-BookingSchema.pre("save", async function (next) {
+BookingSchema.pre("save", async function () {
   const booking = this;
 
   if (booking.isModified("eventId") || booking.isNew) {
@@ -45,21 +45,20 @@ BookingSchema.pre("save", async function (next) {
         );
 
         error.name = "ValidationError";
-
-        return next(error);
+        throw error;
       }
-    } catch {
+    } catch (error) {
+      if (error.name === "ValidationError") {
+        throw error;
+      }
+
       const validationError = new Error(
         "Invalid event ID format or database error"
       );
 
       validationError.name = "ValidationError";
-
-      return next(validationError);
-    }
-  }
-
-  next();
+      throw validationError;
+    }  }
 });
 
 BookingSchema.index({ eventId: 1 });

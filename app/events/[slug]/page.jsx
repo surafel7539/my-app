@@ -1,8 +1,9 @@
 import BookingForm from '@/components/BookingForm'
 import EventCards from '@/components/EventCards'
-import { getSimilarEventsBySlug } from '@/lib/actions'
+import { getSimilarEventsBySlug } from '@/lib/actions/similarEvents'
 import { notFound } from 'next/navigation'
 import React from 'react'
+import { cacheLife } from 'next/cache'
 
 export const instant = false
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
@@ -33,12 +34,11 @@ const EventTags = ({eventTags}) => (
 )
 
 const EventDetails = async ({params}) => {
+    'use cache'
+    cacheLife('seconds')
     const {slug} = await params
-    
-    const request = await fetch(`${BASE_URL}/api/events/${slug}`,{
-        cache: 'force-cache'
-    })
-    const {event : {description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview }} = await request.json()
+    const request = await fetch(`${BASE_URL}/api/events/${slug}`)
+    const {event : {_id, description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview }} = await request.json()
 
     if (!description) return notFound()
     
@@ -87,7 +87,7 @@ const EventDetails = async ({params}) => {
                 ): (
                     <p className='text-sm'>Be the first to a spot</p>
                 )}
-                <BookingForm/>
+                <BookingForm eventId={_id} slug={slug}/>
             </div>
         </aside>
 
