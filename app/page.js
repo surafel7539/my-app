@@ -3,7 +3,7 @@ import ExploreBtn from '@/components/ExploreBtn'
 import { events } from '@/lib/contants'
 import React from 'react'
 
-
+export const instance = false
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 const page = async () => {
