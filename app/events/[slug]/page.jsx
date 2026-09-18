@@ -34,6 +34,7 @@ const EventTags = ({eventTags}) => (
 
 const EventDetails = async ({params}) => {
     const {slug} = await params
+    
     const request = await fetch(`${BASE_URL}/api/events/${slug}`,{
         cache: 'force-cache'
     })
