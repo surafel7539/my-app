@@ -1,7 +1,7 @@
 import EventCards from '@/components/EventCards'
 import ExploreBtn from '@/components/ExploreBtn'
 import { events } from '@/lib/contants'
-import React, { Suspense } from 'react'
+import React from 'react'
 
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
@@ -21,10 +21,8 @@ const page = async () => {
         <h3>Featured Events</h3>
 
         <ul className='events'>
-          {event && event.length > 0 && event.map((events) =>(
-            <Suspense key={events.slug} fallback={'Loading events...'}>
-              <EventCards  {...events} />
-            </Suspense>
+          {event && event.length > 0 && event.map(({time, title, date, image, location}) =>(
+            <EventCards key={title} title={title} image={image} slug={slug} time={time} date={date} location={location}  />
           ))}
         </ul>
       </div>
