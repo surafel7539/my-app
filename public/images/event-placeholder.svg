@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="410" height="300" viewBox="0 0 410 300" role="img" aria-label="Event poster unavailable">
+  <rect width="410" height="300" fill="#1f2430"/>
+  <path d="M120 200l45-55 35 40 30-30 60 65z" fill="#3a4251"/>
+  <circle cx="155" cy="120" r="22" fill="#3a4251"/>
+  <text x="205" y="250" fill="#8b93a1" font-family="sans-serif" font-size="20" text-anchor="middle">Poster unavailable</text>
+</svg>

@@ -2,7 +2,12 @@ import Event from "@/database/eventModel";
 import { v2 as cloudinary } from "cloudinary";
 import connectDB from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
-import { rejects } from "node:assert/strict";
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(NextRequest){
     try {
@@ -26,6 +31,14 @@ export async function POST(NextRequest){
         let tags = JSON.parse(data.get('tags'))
         let agenda = JSON.parse(data.get('agenda'))
 
+        const { cloud_name, api_key, api_secret } = cloudinary.config();
+        if (!cloud_name || !api_key || !api_secret) {
+            return NextResponse.json(
+                { message: "Image upload is not configured" },
+                { status: 500 }
+            );
+        }
+
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
@@ -41,13 +54,16 @@ export async function POST(NextRequest){
             .end(buffer);
         });
 
+        if (!result?.secure_url || !result.secure_url.startsWith("https://")) {
+            return NextResponse.json(
+                { message: "Image upload did not return a usable URL" },
+                { status: 502 }
+            );
+        }
+
         event.image = result.secure_url;
 
-        // ... upper route logic, parsing, and Cloudinary upload ...
-
-event.image = result.secure_url;
-
-// 🛠️ Generate a 100% unique slug before saving to the database
+// Generate a unique slug before saving to the database
 const baseSlug = event.title
     ? event.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-\$)+/g, '')
     : 'event';

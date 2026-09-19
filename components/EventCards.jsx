@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import posthog from 'posthog-js'
 import React from 'react'
+import EventPoster from './EventPoster'
 
 const EventCards = ({title, image, slug, location, date, time}) => {
   const handleEventSelected = () => {
@@ -15,7 +16,7 @@ const EventCards = ({title, image, slug, location, date, time}) => {
 
   return (
     <Link href={`/events/${slug}`} id='event-card' onClick={handleEventSelected}>
-        <img src={image} alt={title} height={300} width={410} className='poster'  />
+        <EventPoster src={image} alt={title} height={300} width={410} className='poster' />
         <div className='flex flex-row gap-2'>
             <img src="/icons/pin.svg" alt='location' width={14} height={14} />
             <p>{location}</p>

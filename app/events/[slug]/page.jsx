@@ -1,5 +1,6 @@
 import BookingForm from '@/components/BookingForm'
 import EventCards from '@/components/EventCards'
+import EventPoster from '@/components/EventPoster'
 import { getSimilarEventsBySlug } from '@/lib/actions/similarEvents'
 import { notFound } from 'next/navigation'
 import React from 'react'
@@ -52,7 +53,7 @@ const EventDetails = async ({params}) => {
       </div>
       <div className='details'>
         <div className='content'>
-            <img src={image} alt={title} width={800} height={800} />
+            <EventPoster src={image} alt={title} width={800} height={800} />
             <section className='flex-col-gap-2'>
                 <h2>OverView</h2>
                 <p>{overview}</p>
