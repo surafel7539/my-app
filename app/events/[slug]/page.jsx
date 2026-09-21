@@ -1,12 +1,10 @@
 import BookingForm from '@/components/BookingForm'
 import EventCards from '@/components/EventCards'
+import { getEventBySlug } from '@/lib/actions/events'
 import { getSimilarEventsBySlug } from '@/lib/actions/similarEvents'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import { cacheLife } from 'next/cache'
-
-export const instant = false
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 
 const EventDetailItem = ({icon, alt, label}) => (
@@ -37,10 +35,11 @@ const EventDetails = async ({params}) => {
     'use cache'
     cacheLife('seconds')
     const {slug} = await params
-    const request = await fetch(`${BASE_URL}/api/events/${slug}`)
-    const {event : {_id, description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview }} = await request.json()
+    const event = await getEventBySlug(slug)
 
-    if (!description) return notFound()
+    if (!event) return notFound()
+
+    const {_id, description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview } = event
     
     let bookings = 10;
     const similarEvents = await getSimilarEventsBySlug(slug)
