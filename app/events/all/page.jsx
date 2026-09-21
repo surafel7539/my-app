@@ -1,14 +1,12 @@
 import React from 'react'
 import { cacheLife } from 'next/cache'
 import EventCards from '@/components/EventCards'
-import Event from '@/database/eventModel'
-import connectDB from '@/lib/mongodb'
+import { getAllEvents } from '@/lib/actions/events'
 
 const page = async () => {
 'use cache'
 cacheLife('seconds')
-await connectDB()
-const event = JSON.parse(JSON.stringify(await Event.find().sort({ createdAt: -1 })))
+const event = await getAllEvents()
   return (
     <div className='mt-20 space-y-3'>
             <h3>Available Events</h3>

@@ -1,15 +1,13 @@
 import EventCards from '@/components/EventCards'
 import ExploreBtn from '@/components/ExploreBtn'
-import Event from '@/database/eventModel'
-import connectDB from '@/lib/mongodb'
+import { getAllEvents } from '@/lib/actions/events'
 import { cacheLife } from 'next/cache'
 import React from 'react'
 
 const page = async () => {
   'use cache'
   cacheLife('seconds')
-  await connectDB()
-  const event = JSON.parse(JSON.stringify(await Event.find().sort({ createdAt: -1 })))
+  const event = await getAllEvents()
 
   return (
     <section>

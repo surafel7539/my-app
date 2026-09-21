@@ -1,7 +1,6 @@
 import BookingForm from '@/components/BookingForm'
 import EventCards from '@/components/EventCards'
-import Event from '@/database/eventModel'
-import connectDB from '@/lib/mongodb'
+import { getEventBySlug } from '@/lib/actions/events'
 import { getSimilarEventsBySlug } from '@/lib/actions/similarEvents'
 import { notFound } from 'next/navigation'
 import React from 'react'
@@ -36,12 +35,11 @@ const EventDetails = async ({params}) => {
     'use cache'
     cacheLife('seconds')
     const {slug} = await params
-    await connectDB()
-    const eventDoc = await Event.findOne({ slug: slug.trim().toLowerCase() }).lean()
+    const event = await getEventBySlug(slug)
 
-    if (!eventDoc) return notFound()
+    if (!event) return notFound()
 
-    const {_id, description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview } = JSON.parse(JSON.stringify(eventDoc))
+    const {_id, description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview } = event
     
     let bookings = 10;
     const similarEvents = await getSimilarEventsBySlug(slug)
