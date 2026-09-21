@@ -1,12 +1,11 @@
 import BookingForm from '@/components/BookingForm'
 import EventCards from '@/components/EventCards'
+import Event from '@/database/eventModel'
+import connectDB from '@/lib/mongodb'
 import { getSimilarEventsBySlug } from '@/lib/actions/similarEvents'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import { cacheLife } from 'next/cache'
-
-export const instant = false
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 
 const EventDetailItem = ({icon, alt, label}) => (
@@ -37,10 +36,12 @@ const EventDetails = async ({params}) => {
     'use cache'
     cacheLife('seconds')
     const {slug} = await params
-    const request = await fetch(`${BASE_URL}/api/events/${slug}`)
-    const {event : {_id, description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview }} = await request.json()
+    await connectDB()
+    const eventDoc = await Event.findOne({ slug: slug.trim().toLowerCase() }).lean()
 
-    if (!description) return notFound()
+    if (!eventDoc) return notFound()
+
+    const {_id, description, time, title, date, image, tags, venue, location, mode, audience, agenda, organizer, overview } = JSON.parse(JSON.stringify(eventDoc))
     
     let bookings = 10;
     const similarEvents = await getSimilarEventsBySlug(slug)

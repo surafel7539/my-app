@@ -1,17 +1,15 @@
 import EventCards from '@/components/EventCards'
 import ExploreBtn from '@/components/ExploreBtn'
-import { events } from '@/lib/contants'
+import Event from '@/database/eventModel'
+import connectDB from '@/lib/mongodb'
 import { cacheLife } from 'next/cache'
 import React from 'react'
-
-export const instant = false
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 const page = async () => {
   'use cache'
   cacheLife('seconds')
-  const response = await fetch(`${BASE_URL}/api/events`)
-  const {event} = await response.json()
+  await connectDB()
+  const event = JSON.parse(JSON.stringify(await Event.find().sort({ createdAt: -1 })))
 
   return (
     <section>
