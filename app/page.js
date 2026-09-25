@@ -1,34 +1,22 @@
 import EventCards from '@/components/EventCards'
 import ExploreBtn from '@/components/ExploreBtn'
-import connectDB from '@/lib/mongodb'
-import Event from '@/database/eventModel'
+import { events } from '@/lib/contants'
 import { cacheLife } from 'next/cache'
 import React from 'react'
 
 export const instant = false
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 const page = async () => {
   'use cache'
   cacheLife('seconds')
-
-  let eventData = []
-  
-  try {
-    await connectToDatabase()
-    // Fetch directly from MongoDB
-    const events = await Event.find({}).lean()
-    
-    // Serialize to plain JSON to avoid Mongoose ObjectId errors in Server Components
-    eventData = JSON.parse(JSON.stringify(events))
-  } catch (error) {
-    console.error('Failed to fetch events from database:', error)
-    // The build will succeed and render an empty list instead of crashing
-  }
+  const response = await fetch(`${BASE_URL}/api/events`)
+  const {event} = await response.json()
 
   return (
     <section>
       <h1 className='text-center'>The Hub for Every Dev <br/> Event You Can't Miss</h1>
-      <p className='text-center mt-5'>You Can Find Hackathons, Meetups, and Conferences, All in One Place</p>
+      <p className='text-center mt-5'>You Can Find Hackathons, Meetups, and Confereneces, All in One Place</p>
 
       <ExploreBtn/>
 
@@ -36,21 +24,9 @@ const page = async () => {
         <h3>Featured Events</h3>
 
         <ul className='events'>
-          {eventData && eventData.length > 0 ? (
-            eventData.map(({ time, title, date, image, location, slug, _id }) =>(
-              <EventCards 
-                key={slug || _id} 
-                title={title} 
-                image={image} 
-                slug={slug} 
-                time={time} 
-                date={date} 
-                location={location}  
-              />
-            ))
-          ) : (
-            <p>No events found.</p>
-          )}
+          {event && event.length > 0 && event.map(({time, title, date, image, location, slug}) =>(
+            <EventCards key={slug}  title={title} image={image} slug={slug} time={time} date={date} location={location}  />
+          ))}
         </ul>
       </div>
     </section>
