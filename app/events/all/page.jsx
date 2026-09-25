@@ -4,8 +4,7 @@ import EventCards from '@/components/EventCards'
 export const instant = false
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 const page = async () => {
-'use cache'
-cacheLife('seconds')
+
 const response = await fetch(`${BASE_URL}/api/events`)
 const {event} = await response.json()
   return (

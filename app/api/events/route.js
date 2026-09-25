@@ -47,7 +47,7 @@ export async function POST(NextRequest){
 
 event.image = result.secure_url;
 
-// 🛠️ Generate a 100% unique slug before saving to the database
+
 const baseSlug = event.title
     ? event.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-\$)+/g, '')
     : 'event';
@@ -82,3 +82,4 @@ export async function GET(){
         return NextResponse.json({message:"Couldnt fetch Events"}, {status: 500})
     }
 }
+

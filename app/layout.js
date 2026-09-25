@@ -2,9 +2,10 @@ import { Schibsted_Grotesk, Martian_Mono } from "next/font/google";
 import "./globals.css";
 import LightRays from "@/components/LightRays";
 import NavBar from "@/components/NavBar";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const schibstedGrotesk = Schibsted_Grotesk({
-  variable: "--font-schibsted-grostek",
+  variable: "--font-schibsted-grotesk",
   subsets: ["latin"],
 });
 
@@ -15,19 +16,19 @@ const martianMono = Martian_Mono({
 
 export const metadata = {
   title: "DevEvents",
-  description: "The Hub for Every Dev Event You Mustn't Miss ",
+  description: "The Hub for Every Dev Event You Mustn't Miss",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${schibstedGrotesk.variable} ${martianMono.variable} min-h-screen antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-          <NavBar/>
-        <div className="absolute inset-0 top-0 z-[-1] min-h-screen">
+    <ClerkProvider>
+      <html
+        lang="en"
+        className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased`}
+      >
+        <body className="flex min-h-dvh flex-col relative overflow-x-hidden">
           
+          <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
             <LightRays
               raysOrigin="top-center-offset"
               raysColor="#5dfeca"
@@ -38,15 +39,17 @@ export default function RootLayout({ children }) {
               mouseInfluence={0.1}
               noiseAmount={0}
               distortion={0.01}
-              
-              
-          />
-        </div>
-        <main>
-          {children}
-        </main>
+            />
+          </div>
 
-      </body>
-    </html>
+          <NavBar />
+
+          
+          <main className="flex flex-1 flex-col">
+            {children}
+          </main>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

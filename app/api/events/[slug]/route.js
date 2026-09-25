@@ -19,8 +19,6 @@ export async function GET(_req, { params }) {
 
     const normalizedSlug = slug.trim().toLowerCase();
 
-    
-
     const event = await Event.findOne({
       slug: normalizedSlug,
     }).lean();
@@ -56,6 +54,34 @@ export async function GET(_req, { params }) {
 
     return NextResponse.json(
       { message: "Failed to fetch event" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request, { params }) {
+  try {
+    await connectDB();
+
+    const { slug } = await params;
+    const deletedEvent = await Event.findOneAndDelete({ slug });
+
+    if (!deletedEvent) {
+      return NextResponse.json(
+        { error: "Event not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, message: "Event deleted" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { error: "Server error" },
       { status: 500 }
     );
   }
