@@ -27,7 +27,11 @@ export default function RootLayout({ children }) {
         className={`${schibstedGrotesk.variable} ${martianMono.variable} antialiased`}
       >
         <body className="flex min-h-dvh flex-col relative overflow-x-hidden">
-          
+          <header>
+            <Suspense fallback={<div className="h-16 bg-background" />}>
+              <NavBar />
+            </Suspense>
+          </header>
           <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
             <LightRays
               raysOrigin="top-center-offset"
@@ -41,9 +45,7 @@ export default function RootLayout({ children }) {
               distortion={0.01}
             />
           </div>
-        <Suspense fallback={<div className="h-16 bg-background" />}>
-          <NavBar />
-        </Suspense>
+        
           
           <main className="flex flex-1 flex-col">
             {children}
