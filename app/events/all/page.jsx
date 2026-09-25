@@ -3,10 +3,23 @@ import { cacheLife } from 'next/cache'
 import EventCards from '@/components/EventCards'
 export const instant = false
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+
+async function getCachedEvents() {
+  'use cache';
+  cacheLife('seconds');
+
+  const response = await fetch(`${BASE_URL}/api/events`);
+  
+  if (!response.ok) {
+    console.log('Failed to fetch events');
+  }
+
+  return response.json();
+}
+
 const page = async () => {
 
-const response = await fetch(`${BASE_URL}/api/events`)
-const {event} = await response.json()
+const {event} = await getCachedEvents()
   return (
     <div className='mt-20 space-y-3'>
             <h3>Available Events</h3>

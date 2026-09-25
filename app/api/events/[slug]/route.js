@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 
 import connectDB from "@/lib/mongodb";
 import Event from "@/database/eventModel";
+import { revalidatePath } from "next/cache";
 
 export async function GET(_req, { params }) {
   try {
@@ -38,6 +39,8 @@ export async function GET(_req, { params }) {
       },
       { status: 200 }
     );
+    
+    
   } catch (error) {
     console.error("GET /api/events/[slug] error:", error);
 

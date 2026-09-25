@@ -6,12 +6,23 @@ import React from 'react'
 
 export const instant = false
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+async function getCachedEvents() {
+  'use cache';
+  cacheLife('seconds');
+
+  const response = await fetch(`${BASE_URL}/api/events`);
+  
+  if (!response.ok) {
+    console.log('Failed to fetch events');
+  }
+
+  return response.json();
+}
 
 const page = async () => {
-  'use cache'
-  cacheLife('seconds')
-  const response = await fetch(`${BASE_URL}/api/events`)
-  const {event} = await response.json()
+  
+
+  const {event} = await getCachedEvents()
 
   return (
     <section>

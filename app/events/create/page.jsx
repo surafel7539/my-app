@@ -24,6 +24,7 @@ const page = () => {
 
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState(null)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,8 +36,10 @@ const page = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
+    
     if (file) {
       setImagePreview(URL.createObjectURL(file));
+      setImageFile(file)
     }
   };
 
@@ -47,6 +50,8 @@ const page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const formElement = e.currentTarget
+    
 
     try {
       const data = new FormData(e.currentTarget);
@@ -54,6 +59,13 @@ const page = () => {
       const tags = (data.get("tags") || "").toString();
       const agenda = (data.get("agenda") || "").toString();
 
+      if(imageFile){
+        data.set("image", imageFile)
+      }else{
+        alert('There is no Image Provided')
+        setLoading(false)
+        return;
+      }
       // Format comma-separated tags into array
       data.set(
         "tags",
@@ -80,13 +92,15 @@ const page = () => {
 
       console.log("Created event:", result.event);
       
-      // Navigate home and refresh server cache
+      
+      
       router.push("/");
-      router.refresh();
+      router.refresh()
     } catch (error) {
       console.error("CREATE EVENT ERROR:", error);
       alert("An error occurred while creating the event.");
     } finally {
+      formElement.reset()
       setLoading(false);
     }
   };
@@ -270,7 +284,7 @@ const page = () => {
                   id="image"
                   name="image"
                   type="file"
-                  value={formData.image}
+                  
                   accept="image/png,image/jpeg,image/webp"
                   onChange={handleImageChange}
                   required

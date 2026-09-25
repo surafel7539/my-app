@@ -2,7 +2,7 @@ import Event from "@/database/eventModel";
 import { v2 as cloudinary } from "cloudinary";
 import connectDB from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
-import { rejects } from "node:assert/strict";
+import { revalidatePath } from "next/cache";
 
 export async function POST(NextRequest){
     try {
@@ -45,23 +45,27 @@ export async function POST(NextRequest){
 
         // ... upper route logic, parsing, and Cloudinary upload ...
 
-event.image = result.secure_url;
+        event.image = result.secure_url;
 
 
-const baseSlug = event.title
-    ? event.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-\$)+/g, '')
-    : 'event';
-const uniqueSlug = `${baseSlug}-${Date.now()}`; // Appends timestamp (e.g., "cloud-next-2028-1718912345")
+        const baseSlug = event.title
+            ? event.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-\$)+/g, '')
+            : 'event';
+        const uniqueSlug = `${baseSlug}-${Date.now()}`; // Appends timestamp (e.g., "cloud-next-2028-1718912345")
 
-// Inject the slug into the document creation payload
-const createdEvent = await Event.create({
-    ...event, 
-    slug: uniqueSlug, // 🚀 This fixes the duplicate key error!
-    tags: tags, 
-    agenda: agenda
-});
+        // Inject the slug into the document creation payload
+        const createdEvent = await Event.create({
+            ...event, 
+            slug: uniqueSlug, // 🚀 This fixes the duplicate key error!
+            tags: tags, 
+            agenda: agenda
+        });
 
-return NextResponse.json({ message: 'Event created successfully', event: createdEvent }, { status: 201 });
+        revalidatePath('/')
+        revalidatePath('/events/all')
+
+
+        return NextResponse.json({ message: 'Event created successfully', event: createdEvent }, { status: 201 });
 
     } catch (e) {
         console.error(e);
