@@ -29,6 +29,7 @@ const page = () => {
       
     } finally{
       setLoading(false)
+      setPassword(null)
     }
      
   }

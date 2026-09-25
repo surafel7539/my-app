@@ -78,7 +78,21 @@ const page = () => {
       }
 
       console.log("Created event:", result.event);
-
+      setFormData({
+        title: "",
+        description: "",
+        date: "",
+        time: "",
+        tags: "",
+        venue: "",
+        location: "",
+        mode: "",
+        audience: "",
+        agenda: "",
+        organizer: "",
+        overview: "",
+      })
+      setImagePreview(null)
       // Navigate home and refresh server cache
       router.push("/");
       router.refresh();
@@ -98,7 +112,7 @@ const page = () => {
           Event Management
         </div>
 
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        <h1>
           Create Event
         </h1>
 
