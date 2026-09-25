@@ -41,9 +41,9 @@ export default function RootLayout({ children }) {
               distortion={0.01}
             />
           </div>
-
+        <Suspense fallback={<div className="h-16 bg-background" />}>
           <NavBar />
-
+        </Suspense>
           
           <main className="flex flex-1 flex-col">
             {children}
