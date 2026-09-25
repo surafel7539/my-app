@@ -25,11 +25,12 @@ const page = () => {
       }
       if(success){
         route.push('/events/admin/admindashboard')
+        route.refresh()
       }
       
     } finally{
       setLoading(false)
-      setPassword(null)
+      
     }
      
   }
