@@ -1,7 +1,7 @@
 import EventCards from '@/components/EventCards'
 import ExploreBtn from '@/components/ExploreBtn'
 import { connectToDatabase } from '@/lib/mongoose'
-import Event from '@/models/Event'
+import Event from '@/database/eventModel'
 import { cacheLife } from 'next/cache'
 import React from 'react'
 
