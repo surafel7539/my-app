@@ -19,6 +19,7 @@ const page = () => {
     agenda: "",
     organizer: "",
     overview: "",
+    image:"",
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -78,21 +79,7 @@ const page = () => {
       }
 
       console.log("Created event:", result.event);
-      setFormData({
-        title: "",
-        description: "",
-        date: "",
-        time: "",
-        tags: "",
-        venue: "",
-        location: "",
-        mode: "",
-        audience: "",
-        agenda: "",
-        organizer: "",
-        overview: "",
-      })
-      setImagePreview(null)
+      
       // Navigate home and refresh server cache
       router.push("/");
       router.refresh();
@@ -283,6 +270,7 @@ const page = () => {
                   id="image"
                   name="image"
                   type="file"
+                  value={formData.image}
                   accept="image/png,image/jpeg,image/webp"
                   onChange={handleImageChange}
                   required
